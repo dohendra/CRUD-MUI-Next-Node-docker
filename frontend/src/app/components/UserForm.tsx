@@ -64,7 +64,7 @@ export default function UserForm({ initialData, userId }: UserFormProps) {
 
   const onSubmit = async (data: UserFormData) => {
     try {
-      // Convert comma-separated string to array
+
       const formattedData = {
         ...data,
         interest: data.interest.split(',').map(item => item.trim()).filter(Boolean)
