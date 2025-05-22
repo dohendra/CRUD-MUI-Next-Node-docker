@@ -24,18 +24,20 @@ services:
     volumes:
       - ./backend:/app
       - /app/node_modules
-    environment:
-      - PORT=4000
-      - MONGODB_URI=mongodb://mongodb:27017/userdb
+    # environment:
+    #   - PORT=4000
+    #   - MONGODB_URI=mongodb://mongodb:27017/userdb
     depends_on:
       - mongodb
+    env_file:
+    - .env
 
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb_data:/data/db
+  # mongodb:
+  #   image: mongo:latest
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongodb_data:/data/db
 
 volumes:
   mongodb_data: 

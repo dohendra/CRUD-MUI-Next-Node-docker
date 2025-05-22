@@ -87,5 +87,5 @@ NEXT_PUBLIC_API_URL=http://localhost:4000
 Backend (.env):
 ```
 PORT=4000
-MONGODB_URI=mongodb://mongodb:27017/userdb
+MONGODB_URI= will be provided by mail
 ``` 

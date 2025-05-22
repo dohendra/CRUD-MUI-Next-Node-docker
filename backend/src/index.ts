@@ -10,15 +10,12 @@ dotenv.config();
 const app = express();
 const port = process.env.PORT || 4000;
 
-// Middleware
 app.use(cors());
 app.use(helmet());
 app.use(express.json());
 
-// Routes
 app.use('/api/users', userRoutes);
 
-// MongoDB connection
 mongoose.connect(process.env.MONGODB_URI || 'mongodb://localhost:27017/userdb')
   .then(() => {
     console.log('Connected to MongoDB');

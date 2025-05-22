@@ -1,5 +1,5 @@
 {
-  "name": "user-management-backend",
+  "name": "backend",
   "version": "1.0.0",
   "description": "User Management Backend Service",
   "main": "src/index.ts",
