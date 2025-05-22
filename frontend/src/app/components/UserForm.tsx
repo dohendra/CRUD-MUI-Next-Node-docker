@@ -17,20 +17,26 @@ import {
 
 interface UserFormData {
   user: string;
-  interest: string[];
+  interest: string;
   age: number;
   mobile: number;
   email: string;
 }
 
 interface UserFormProps {
-  initialData?: UserFormData;
+  initialData?: {
+    user: string;
+    interest: string[];
+    age: number;
+    mobile: number;
+    email: string;
+  };
   userId?: string;
 }
 
 const schema = yup.object().shape({
   user: yup.string().required('Name is required'),
-  interest: yup.array().of(yup.string()).min(1, 'At least one interest is required'),
+  interest: yup.string().required('At least one interest is required'),
   age: yup.number().required('Age is required').min(0, 'Age must be positive'),
   mobile: yup.number().required('Mobile number is required').test(
     'len',
@@ -44,15 +50,30 @@ export default function UserForm({ initialData, userId }: UserFormProps) {
   const router = useRouter();
   const { register, handleSubmit, formState: { errors } } = useForm<UserFormData>({
     resolver: yupResolver(schema),
-    defaultValues: initialData
+    defaultValues: initialData ? {
+      ...initialData,
+      interest: initialData.interest.join(', ')
+    } : {
+      user: '',
+      interest: '',
+      age: undefined,
+      mobile: undefined,
+      email: ''
+    }
   });
 
   const onSubmit = async (data: UserFormData) => {
     try {
+      // Convert comma-separated string to array
+      const formattedData = {
+        ...data,
+        interest: data.interest.split(',').map(item => item.trim()).filter(Boolean)
+      };
+
       if (userId) {
-        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`, data);
+        await axios.put(`${process.env.NEXT_PUBLIC_API_URL}/api/users/${userId}`, formattedData);
       } else {
-        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, data);
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/users`, formattedData);
       }
       router.push('/');
       router.refresh();
@@ -81,7 +102,7 @@ export default function UserForm({ initialData, userId }: UserFormProps) {
               label="Interests (comma-separated)"
               {...register('interest')}
               error={!!errors.interest}
-              helperText={errors.interest?.message}
+              helperText={errors.interest?.message || "Enter interests separated by commas"}
               placeholder="e.g., Comics, Sports"
             />
           </Grid>

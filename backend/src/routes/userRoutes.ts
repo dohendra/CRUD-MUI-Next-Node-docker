@@ -4,7 +4,7 @@ import User from '../models/User';
 
 const router = express.Router();
 
-// Validation middleware
+
 const validateUser = [
   body('user').trim().notEmpty().withMessage('User name is required'),
   body('interest').isArray().withMessage('Interest must be an array'),
@@ -14,7 +14,7 @@ const validateUser = [
   body('email').isEmail().withMessage('Please enter a valid email')
 ];
 
-// Get all users
+
 router.get('/', async (req, res) => {
   try {
     const users = await User.find();
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Get user by ID
+
 router.get('/:id', async (req, res) => {
   try {
     const user = await User.findById(req.params.id);
@@ -37,7 +37,7 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Create new user
+
 router.post('/', validateUser, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -53,7 +53,7 @@ router.post('/', validateUser, async (req, res) => {
   }
 });
 
-// Update user
+
 router.put('/:id', validateUser, async (req, res) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) {
@@ -75,7 +75,7 @@ router.put('/:id', validateUser, async (req, res) => {
   }
 });
 
-// Delete user
+
 router.delete('/:id', async (req, res) => {
   try {
     const user = await User.findByIdAndDelete(req.params.id);
